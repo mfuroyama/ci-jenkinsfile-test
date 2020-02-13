@@ -4,16 +4,16 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo "Running ${BUILD_ID} on ${JENKINS_URL} ${params.CODE_BRANCH} ${params.CODE_VERSION} ${params.CODE_STRING}"
+                echo "Running ${params.CV_BRANCH} ${JENKINS_URL} ${params.CODE_BRANCH} ${params.CODE_VERSION} ${params.CODE_STRING}"
                 sh '''
                     echo "Project parameters"
-                    echo "CV_BRANCH=$CV_BRANCH"
-                    echo "CV_URL=$CV_URL"
-                    echo "CV_COMMIT=$CV_COMMIT"
-                    echo "CV_PROJECT=$CV_PROJECT"
-                    echo "CV_ENVIRONMENT=$CV_ENVIRONMENT"
-                    echo "CV_VERSION=$CV_VERSION"
-                    echo "CV_CREDENTIALS_ID=$CV_CREDENTIALS_ID"
+                    echo "CV_BRANCH=${params.CV_BRANCH}"
+                    echo "CV_URL=${params.CV_URL}"
+                    echo "CV_COMMIT=${params.CV_COMMIT}"
+                    echo "CV_PROJECT=${params.CV_PROJECT}"
+                    echo "CV_ENVIRONMENT=${params.CV_ENVIRONMENT}"
+                    echo "CV_VERSION=${params.CV_VERSION}"
+                    echo "CV_CREDENTIALS_ID=${params.CV_CREDENTIALS_ID}"
                 '''
                 sh 'ls -l'
             }
