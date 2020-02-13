@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo "Running ${params.CV_BRANCH} ${JENKINS_URL} ${params.CODE_BRANCH} ${params.CODE_VERSION} ${params.CODE_STRING}"
+                echo "Running ${params.CV_BRANCH} ${JENKINS_URL} ${params.CV_ENVIRONMENT} ${params.CV_PROJECT} ${params.CV_VERSION}"
                 sh '''
                     echo "Project parameters"
                     echo "CV_BRANCH=${params.CV_BRANCH}"
