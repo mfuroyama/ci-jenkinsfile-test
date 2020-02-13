@@ -1,12 +1,15 @@
 pipeline {
     agent any
+    variables {
+        CURRENT_BRANCH: 
+    }
 
     stages {
         stage('Build') {
             steps {
                 echo 'Building..'
                 sh '''
-                   echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL} ${env.CURRENT_BRANCH} ${env.CURRENT_VERSION}"
+                   echo "Running ${BUILD_ID} on ${JENKINS_URL} ${CURRENT_BRANCH} ${CURRENT_VERSION}"
                 '''
                 sh 'ls -l'
             }
