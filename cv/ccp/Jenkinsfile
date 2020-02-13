@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building..'
+                VERSION=$(echo $GIT_BRANCH| cut -d'/' -f 5)
+                echo version $VERSION
+                echo $BUILD_ID
+                echo $BUILD_DISPLAY_NAME
+                ls
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing..'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+            }
+        }
+    }
+}
