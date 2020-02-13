@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    variables {
-        CURRENT_BRANCH: 
-    }
 
     stages {
         stage('Build') {
