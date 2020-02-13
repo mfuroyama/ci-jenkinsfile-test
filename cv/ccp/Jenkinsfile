@@ -5,6 +5,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
+                echo params
                 sh '''
                    echo "Running ${BUILD_ID} on ${JENKINS_URL} ${CODE_BRANCH} ${CODE_VERSION} ${CODE_STRING}"
                    env
