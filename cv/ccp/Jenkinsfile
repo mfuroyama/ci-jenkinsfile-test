@@ -6,7 +6,7 @@ pipeline {
             steps {
                 echo 'Building..'
                 sh '''
-                   echo "Running ${BUILD_ID} on ${JENKINS_URL} ${CURRENT_BRANCH} ${CURRENT_VERSION}"
+                   echo "Running ${BUILD_ID} on ${JENKINS_URL} ${CODE_BRANCH} ${CODE_VERSION} ${CODE_STRING}"
                 '''
                 sh 'ls -l'
             }
