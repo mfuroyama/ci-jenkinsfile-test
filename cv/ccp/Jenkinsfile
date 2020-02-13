@@ -1,11 +1,15 @@
 pipeline {
     agent any
+    environment {
+        CODE_BRANCH = params.CODE_BRANCH
+        CODE_VERSION = params.CODE_VERSION
+        CODE_STRING = params.CODE_STRING
+    }
 
     stages {
         stage('Build') {
             steps {
                 echo 'Building..'
-                echo params
                 sh '''
                    echo "Running ${BUILD_ID} on ${JENKINS_URL} ${CODE_BRANCH} ${CODE_VERSION} ${CODE_STRING}"
                    env
