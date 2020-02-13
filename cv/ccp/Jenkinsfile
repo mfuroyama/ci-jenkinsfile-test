@@ -5,6 +5,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
+                echo 'echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL} ${env.GIT_BRANCH}"'
                 sh 'ls -l'
             }
         }
