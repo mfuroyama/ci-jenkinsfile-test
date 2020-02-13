@@ -7,6 +7,8 @@ pipeline {
                 echo 'Building..'
                 sh '''
                    echo "Running ${BUILD_ID} on ${JENKINS_URL} ${CODE_BRANCH} ${CODE_VERSION} ${CODE_STRING}"
+                   env
+                   printenv
                 '''
                 sh 'ls -l'
             }
