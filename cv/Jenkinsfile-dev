@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build Dev Package') {
+            environment {
+                CV_BRANCH = "${params.CV_BRANCH}"
+                CV_URL = "${params.CV_URL}"
+                CV_COMMIT = "${params.CV_COMMIT}"
+                CV_PROJECT = "${params.CV_PROJECT}"
+                CV_ENVIRONMENT = "${params.CV_ENVIRONMENT}"
+                CV_VERSION = "${params.CV_VERSION}"
+                CV_CREDENTIALS_ID = "${params.CV_CREDENTIALS_ID}"
+            }
+            steps {
+                echo "Running ${params.CV_BRANCH} ${JENKINS_URL} ${params.CV_ENVIRONMENT} ${params.CV_PROJECT} ${params.CV_VERSION}"
+                sh '''
+                    echo "Project parameters"
+                    echo "CV_BRANCH=${CV_BRANCH}"
+                    echo "CV_URL=${CV_URL}"
+                    echo "CV_COMMIT=${CV_COMMIT}"
+                    echo "CV_PROJECT=${CV_PROJECT}"
+                    echo "CV_ENVIRONMENT=${CV_ENVIRONMENT}"
+                    echo "CV_VERSION=${CV_VERSION}"
+                    echo "CV_CREDENTIALS_ID=${CV_CREDENTIALS_ID}"
+                '''
+                sh 'ls -l'
+            }
+        }
+        stage('Inject and deploy to AWS/EDE') {
+            steps {
+                echo 'Deploying....'
+            }
+        }
+    }
+}
