@@ -13,7 +13,7 @@ pipeline {
                 CV_CREDENTIALS_ID = "${params.CV_CREDENTIALS_ID}"
             }
             steps {
-                buildName "${params.CV_ENVIRONMENT} ${params.CV_PROJECT} ${params.CV_VERSION}"
+                buildName "#${env.BUILD_ID} ${params.CV_ENVIRONMENT} ${params.CV_PROJECT} ${params.CV_VERSION}"
                 echo "Running ${params.CV_BRANCH} ${JENKINS_URL} ${params.CV_ENVIRONMENT} ${params.CV_PROJECT} ${params.CV_VERSION}"
                 sh '''
                     echo "Project parameters"
