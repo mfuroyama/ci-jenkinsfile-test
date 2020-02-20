@@ -26,6 +26,7 @@ pipeline {
                     echo "CV_CREDENTIALS_ID=${CV_CREDENTIALS_ID}"
                 '''
                 sh 'ls -l'
+                sh 'pwd'
                 script {
                     def build = load "../../helpers/Build.Groovy"
                     build.buildSomething()
