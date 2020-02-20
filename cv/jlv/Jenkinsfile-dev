@@ -48,7 +48,7 @@ pipeline {
                 '''
             }
         }
-        stage('Inject properties') {
+        stage('Inject properties / Push to Nexus') {
             steps {
                 script {
                     def projectUpperCase = "$params.CV_MODULE".toUpperCase()
@@ -67,6 +67,11 @@ pipeline {
                         'war' //file type
                     )
                 }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying...'
             }
         }
     }
