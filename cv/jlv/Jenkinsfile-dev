@@ -1,3 +1,5 @@
+def build
+
 pipeline {
     agent any
 
@@ -27,6 +29,7 @@ pipeline {
                 '''
                 sh 'ls -l'
                 sh 'pwd'
+                build = load "helpers/Build.Groovy"
             }
         }
         stage('Build from source') {
@@ -45,7 +48,6 @@ pipeline {
         stage('Inject properties') {
             steps {
                 script {
-                    def build = load "helpers/Build.Groovy"
                     def projectUpperCase = "$params.CV_PROJECT".toUpperCase()
 
                     build.insertPropsWarWeb(
