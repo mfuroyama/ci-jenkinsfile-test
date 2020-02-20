@@ -1,4 +1,4 @@
-def build
+def buildHelper
 
 pipeline {
     agent any
@@ -29,7 +29,7 @@ pipeline {
                 '''
                 sh 'ls -l'
                 sh 'pwd'
-                build = load "helpers/Build.Groovy"
+                buildHelper = load "helpers/Build.Groovy"
             }
         }
         stage('Build from source') {
@@ -50,13 +50,13 @@ pipeline {
                 script {
                     def projectUpperCase = "$params.CV_PROJECT".toUpperCase()
 
-                    build.insertPropsWarWeb(
+                    buildHelper.insertPropsWarWeb(
                         'aws/dev/' + "${params.CV_PROJECT}", //file path to env specific configs
                         'appconfig-production.properties', //prop file to import
                         'CV-HelpFiles-Dev/WebHelp-' + projectUpperCase
                     )
 
-                    build.pushToNexus(
+                    buildHelper.pushToNexus(
                         'cv.aws.dev', //groupid
                         'CV' + projectUpperCase, //artifactid
                         'CV-RELEASE' , //repo
