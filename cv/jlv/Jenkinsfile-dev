@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Build Test Package') {
+        stage('Build Dev Package') {
             environment {
                 CV_BRANCH = "${params.CV_BRANCH}"
                 CV_URL = "${params.CV_URL}"
@@ -13,8 +13,8 @@ pipeline {
                 CV_CREDENTIALS_ID = "${params.CV_CREDENTIALS_ID}"
             }
             steps {
-                buildName "#${env.BUILD_ID} ${params.CV_PROJECT} ${params.CV_ENVIRONMENT} ${params.CV_VERSION}"
-                echo "Running ${params.CV_BRANCH} ${JENKINS_URL} ${params.CV_ENVIRONMENT} ${params.CV_PROJECT} ${params.CV_VERSION}"
+                buildName "#${env.BUILD_ID} ${params.CV_PROJECT} ${params.CV_ENVIRONMENT}"
+                echo "Running ${params.CV_BRANCH} ${JENKINS_URL} ${params.CV_ENVIRONMENT} ${params.CV_PROJECT} (dev has no version)"
                 sh '''
                     echo "Project parameters"
                     echo "CV_BRANCH=${CV_BRANCH}"
@@ -26,9 +26,13 @@ pipeline {
                     echo "CV_CREDENTIALS_ID=${CV_CREDENTIALS_ID}"
                 '''
                 sh 'ls -l'
+                script {
+                    def build = load "../../helpers/Build.Groovy"
+                    build.buildSomething()
+                }
             }
         }
-        stage('Inject and deploy to DTE Gold') {
+        stage('Inject and deploy to AWS/EDE') {
             steps {
                 echo 'Deploying....'
             }
