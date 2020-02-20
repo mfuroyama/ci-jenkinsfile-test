@@ -72,7 +72,7 @@ pipeline {
                     def job = 'CV-' + params.CV_MODULE.toUpperCase() + '-AWS-Deploy'
                     def deployName = 'CV' + params.CV_ENVIRONMENT.toUpperCase()
                 }
-                echo "build job: '${job}', wait: false, parameters: [[$class: 'StringParameterValue', name: 'DEPLOYNAME', value: '${deployName}'],[$class: 'StringParameterValue', name: 'DEPLOYTARGET', value: 'CV_MgdSrvr_01']]"
+                echo "build job: '${job}', '${deployName}' 'DEPLOYTARGET', value: 'CV_MgdSrvr_01']]"
             }
         }
     }
