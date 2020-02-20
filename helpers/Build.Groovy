@@ -2,6 +2,15 @@ def buildSomething () {
     println('Building something')
 }
 
+def buildWAR () {
+    println "Build CV ${params.CV_MODULE} ${params.CV_ENVIRONMENT} ${params.CV_VERSION}"
+    sh '''
+        echo './grailsw -Dhttps.protocols=TLSv1.2 -Dgrails.env=production war'
+        pwd
+        ls -al
+    '''
+}
+
 def insertPropsWarWeb(String propFolder, String propFile, String helpFileFolder) {
     println('insertPropsWarWeb')
     println(propFolder)
