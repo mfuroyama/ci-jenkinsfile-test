@@ -28,7 +28,7 @@ pipeline {
                 sh 'ls -l'
                 sh 'pwd'
                 script {
-                    def build = load "../../helpers/Build.Groovy"
+                    def build = load "helpers/Build.Groovy"
                     build.buildSomething()
                 }
             }
