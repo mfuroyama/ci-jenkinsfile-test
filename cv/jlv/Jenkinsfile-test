@@ -1,3 +1,5 @@
+def buildHelper
+
 pipeline {
     agent any
 
@@ -5,38 +7,66 @@ pipeline {
         CV_BRANCH = "${params.CV_BRANCH}"
         CV_URL = "${params.CV_URL}"
         CV_COMMIT = "${params.CV_COMMIT}"
-        CV_PROJECT = "${params.CV_PROJECT}"
+        CV_MODULE = "${params.CV_MODULE}"
         CV_ENVIRONMENT = "${params.CV_ENVIRONMENT}"
         CV_VERSION = "${params.CV_VERSION}"
         CV_CREDENTIALS_ID = "${params.CV_CREDENTIALS_ID}"
     }
 
     stages {
-        stage('Build Test Package') {
+        stage('Setup Project') {
             steps {
-                buildName "#${env.BUILD_ID} ${params.CV_PROJECT} ${params.CV_ENVIRONMENT} ${params.CV_VERSION}"
-                echo "Running ${params.CV_BRANCH} ${JENKINS_URL} ${params.CV_ENVIRONMENT} ${params.CV_PROJECT} ${params.CV_VERSION}"
+                buildName "#${env.BUILD_ID} ${params.CV_MODULE} ${params.CV_ENVIRONMENT}"
                 sh '''
-                    echo "Project parameters"
+                    echo "=== PROJECT PARAMETERS ==="
                     echo "CV_BRANCH=${CV_BRANCH}"
                     echo "CV_URL=${CV_URL}"
                     echo "CV_COMMIT=${CV_COMMIT}"
-                    echo "CV_PROJECT=${CV_PROJECT}"
+                    echo "CV_MODULE=${CV_MODULE}"
                     echo "CV_ENVIRONMENT=${CV_ENVIRONMENT}"
                     echo "CV_VERSION=${CV_VERSION}"
                     # echo "CV_CREDENTIALS_ID=${CV_CREDENTIALS_ID}"
                 '''
                 sh 'ls -l'
+                sh 'pwd'
 
                 script {
-                    def build = load "helpers/Build.Groovy"
-                    build.buildSomething()
+                    buildHelper = load "helpers/Build.Groovy"
                 }
             }
         }
-        stage('Inject and deploy to DTE Gold') {
+        stage('Build from source') {
             steps {
-                echo 'Deploying....'
+                echo "Pulling CV ${params.CV_MODULE} from ${params.CV_BRANCH} ${JENKINS_URL}"
+                git branch:"cv/${params.CV_MODULE}/${params.CV_ENVIRONMENT}/${params.CV_VERSION}", url: "https://${params.CV_CREDENTIALS_ID}@github.com/mfuroyama/project-flow-test.git"
+
+                echo "Build CV ${params.CV_MODULE} ${params.CV_ENVIRONMENT} ${params.CV_VERSION}"
+                sh '''
+                    echo './grailsw -Dhttps.protocols=TLSv1.2 -Dgrails.env=production war'
+                    pwd
+                    ls -al
+                '''
+            }
+        }
+        stage('Inject properties') {
+            steps {
+                script {
+                    def projectUpperCase = "$params.CV_MODULE".toUpperCase()
+
+                    buildHelper.insertPropsWarWeb(
+                        'aws/DTEGold/' + "${params.CV_MODULE}", //file path to env specific configs
+                        'appconfig-production.properties', //prop file to import
+                        'CV-HelpFiles-Dev/WebHelp-' + projectUpperCase
+                    )
+
+                    buildHelper.pushToNexus(
+                        'cv.dtegold.test', //groupid
+                        'CV' + projectUpperCase, //artifactid
+                        'CV-RELEASE' , //repo
+                        './stage/', //folder with artifact,
+                        'war' //file type
+                    )
+                }
             }
         }
     }

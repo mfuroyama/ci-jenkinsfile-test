@@ -7,7 +7,7 @@ pipeline {
         CV_BRANCH = "${params.CV_BRANCH}"
         CV_URL = "${params.CV_URL}"
         CV_COMMIT = "${params.CV_COMMIT}"
-        CV_PROJECT = "${params.CV_PROJECT}"
+        CV_MODULE = "${params.CV_MODULE}"
         CV_ENVIRONMENT = "${params.CV_ENVIRONMENT}"
         CV_VERSION = "${params.CV_VERSION}"
         CV_CREDENTIALS_ID = "${params.CV_CREDENTIALS_ID}"
@@ -16,13 +16,13 @@ pipeline {
     stages {
         stage('Setup Project') {
             steps {
-                buildName "#${env.BUILD_ID} ${params.CV_PROJECT} ${params.CV_ENVIRONMENT}"
+                buildName "#${env.BUILD_ID} ${params.CV_MODULE} ${params.CV_ENVIRONMENT}"
                 sh '''
                     echo "=== PROJECT PARAMETERS ==="
                     echo "CV_BRANCH=${CV_BRANCH}"
                     echo "CV_URL=${CV_URL}"
                     echo "CV_COMMIT=${CV_COMMIT}"
-                    echo "CV_PROJECT=${CV_PROJECT}"
+                    echo "CV_MODULE=${CV_MODULE}"
                     echo "CV_ENVIRONMENT=${CV_ENVIRONMENT}"
                     # echo "CV_VERSION=${CV_VERSION}"
                     # echo "CV_CREDENTIALS_ID=${CV_CREDENTIALS_ID}"
@@ -37,10 +37,10 @@ pipeline {
         }
         stage('Build from source') {
             steps {
-                echo "Pulling CV ${params.CV_PROJECT} from ${params.CV_BRANCH} ${JENKINS_URL}"
-                git branch:"cv/${params.CV_PROJECT}/${params.CV_ENVIRONMENT}", url: "https://${params.CV_CREDENTIALS_ID}@github.com/mfuroyama/project-flow-test.git"
+                echo "Pulling CV ${params.CV_MODULE} from ${params.CV_BRANCH} ${JENKINS_URL}"
+                git branch:"cv/${params.CV_MODULE}/${params.CV_ENVIRONMENT}", url: "https://${params.CV_CREDENTIALS_ID}@github.com/mfuroyama/project-flow-test.git"
 
-                echo "Build CV ${params.CV_PROJECT} ${params.CV_ENVIRONMENT} ('dev' has no version)"
+                echo "Build CV ${params.CV_MODULE} ${params.CV_ENVIRONMENT} ('dev' has no version)"
                 sh '''
                     echo './grailsw -Dhttps.protocols=TLSv1.2 -Dgrails.env=production war'
                     pwd
@@ -51,10 +51,10 @@ pipeline {
         stage('Inject properties') {
             steps {
                 script {
-                    def projectUpperCase = "$params.CV_PROJECT".toUpperCase()
+                    def projectUpperCase = "$params.CV_MODULE".toUpperCase()
 
                     buildHelper.insertPropsWarWeb(
-                        'aws/dev/' + "${params.CV_PROJECT}", //file path to env specific configs
+                        'aws/dev/' + "${params.CV_MODULE}", //file path to env specific configs
                         'appconfig-production.properties', //prop file to import
                         'CV-HelpFiles-Dev/WebHelp-' + projectUpperCase
                     )

@@ -9,6 +9,13 @@ def insertPropsWarWeb(String propFolder, String propFile, String helpFileFolder)
     println(helpFileFolder)
 }
 
+def insertPropsWarWebWithDeployFile(String propFolder, String propFile, String appName, String appTarget, String wlsDomain, String appPath, String helpFileFolder) {
+    println('insertPropsWarWebWithDeployFile')
+    println(propFolder)
+    println(propFile)
+    println(helpFileFolder)
+}
+
 /**
  * Push artifact to Nexus server
  * @param  groupId        [description]
