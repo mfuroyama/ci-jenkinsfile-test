@@ -30,7 +30,7 @@ def pushToNexus(String groupId, String artifactId, String repo, String artifactF
     buildNumber="${env.BUILD_NUMBER}"
     buildTimestamp="${env.BUILD_TIMESTAMP}"
 
-    println("pushToNexus:" + buildNumber + buildTimestdamp)
+    println("pushToNexus:" + buildNumber + buildTimestamp)
 }
 
 return this
