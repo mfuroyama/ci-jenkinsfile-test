@@ -37,6 +37,8 @@ pipeline {
                 echo "Build CV ${params.CV_PROJECT} ${params.CV_ENVIRONMENT} ('dev' has no version)"
                 sh '''
                     echo './grailsw -Dhttps.protocols=TLSv1.2 -Dgrails.env=production war'
+                    pwd
+                    ls -al
                 '''
             }
         }
