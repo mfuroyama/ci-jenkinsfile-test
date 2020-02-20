@@ -1,4 +1,6 @@
 def buildHelper
+def moduleName
+def environmentName
 
 pipeline {
     agent any
@@ -32,6 +34,8 @@ pipeline {
 
                 script {
                     buildHelper = load "helpers/Build.Groovy"
+                    moduleName = params.CV_MODULE.toUpperCase()
+                    environmentName = params.CV_ENVIRONMENT.toUpperCase()
                 }
             }
         }
@@ -48,17 +52,15 @@ pipeline {
         stage('Inject properties / Push to Nexus') {
             steps {
                 script {
-                    def moduleUpperCase = "$params.CV_MODULE".toUpperCase()
-
                     buildHelper.insertPropsWarWeb(
                         'aws/dev/' + "${params.CV_MODULE}", //file path to env specific configs
                         'appconfig-production.properties', //prop file to import
-                        'CV-HelpFiles-Dev/WebHelp-' + moduleUpperCase
+                        'CV-HelpFiles-Dev/WebHelp-' + moduleName
                     )
 
                     buildHelper.pushToNexus(
                         'cv.aws.dev', //groupid
-                        'CV' + moduleUpperCase, //artifactid
+                        'CV' + moduleName, //artifactid
                         'CV-RELEASE' , //repo
                         './stage/', //folder with artifact,
                         'war' //file type
@@ -68,11 +70,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                script {
-                    def job = 'CV-' + params.CV_MODULE.toUpperCase() + '-AWS-Deploy'
-                    def deployName = 'CV' + params.CV_ENVIRONMENT.toUpperCase()
-                }
-                echo "build job: '${job}', '${deployName}' 'DEPLOYTARGET', value: 'CV_MgdSrvr_01']]"
+                echo "build job: 'CV-${environmentName}-AWS-Deploy', 'CV${moduleName}' 'DEPLOYTARGET', value: 'CV_MgdSrvr_01']]"
             }
         }
     }
