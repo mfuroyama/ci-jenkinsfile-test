@@ -40,7 +40,7 @@ pipeline {
                 echo "Pulling CV ${params.CV_MODULE} from ${params.CV_BRANCH} ${JENKINS_URL}"
                 echo "https://${params.CV_CREDENTIALS_ID}@github.com/mfuroyama/project-flow-test.git"
                 echo "cv/${params.CV_MODULE}/${params.CV_ENVIRONMENT}/${params.CV_VERSION}"
-                git branch:"cv/${params.CV_MODULE}/${params.CV_ENVIRONMENT}/${params.CV_VERSION}", url: "https://${params.CV_CREDENTIALS_ID}@github.com/mfuroyama/project-flow-test.git"
+                git branch:"cv/${params.CV_MODULE}/${params.CV_ENVIRONMENT}", url: "https://${params.CV_CREDENTIALS_ID}@github.com/mfuroyama/project-flow-test.git"
 
                 script {
                     buildHelper.buildWAR()
