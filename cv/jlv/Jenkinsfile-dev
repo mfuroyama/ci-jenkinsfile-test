@@ -37,10 +37,8 @@ pipeline {
         }
         stage('Build from source') {
             steps {
-                echo "Pulling CV ${params.CV_MODULE} from ${params.CV_BRANCH} ${JENKINS_URL}"
-                git branch:"cv/${params.CV_MODULE}/${params.CV_ENVIRONMENT}", url: "https://${params.CV_CREDENTIALS_ID}@github.com/mfuroyama/project-flow-test.git"
-
                 script {
+                    buildHelper.cloneRepository()
                     buildHelper.buildWAR()
                 }
             }
