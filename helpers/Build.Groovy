@@ -2,14 +2,6 @@ def buildSomething () {
     println('Building something')
 }
 
-// echo "Pulling CV ${params.CV_MODULE} from ${params.CV_BRANCH} ${JENKINS_URL}"
-// git branch:"cv/${params.CV_MODULE}/${params.CV_ENVIRONMENT}", url: "https://${params.CV_CREDENTIALS_ID}@github.com/mfuroyama/project-flow-test.git"
-
-def cloneRepository() {
-    println "Pulling CV ${params.CV_MODULE} from ${params.CV_BRANCH} ${JENKINS_URL}"
-    git branch: "cv/${params.CV_MODULE}/${params.CV_ENVIRONMENT}", url: "https://${params.CV_CREDENTIALS_ID}@github.com/mfuroyama/project-flow-test.git" }
-}
-
 def buildWAR () {
     println "Build CV ${params.CV_MODULE} ${params.CV_ENVIRONMENT} ${params.CV_VERSION}"
     sh '''
