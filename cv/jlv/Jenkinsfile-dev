@@ -29,7 +29,10 @@ pipeline {
                 '''
                 sh 'ls -l'
                 sh 'pwd'
-                buildHelper = load "helpers/Build.Groovy"
+
+                script {
+                    buildHelper = load "helpers/Build.Groovy"
+                }
             }
         }
         stage('Build from source') {
