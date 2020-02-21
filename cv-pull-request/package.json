@@ -1,0 +1,31 @@
+{
+  "name": "cv-pull-request",
+  "version": "1.0.0",
+  "description": "Utility for auto-generating CV pull requests",
+  "main": "index.js",
+    "build": "npx pkg ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mfuroyama/ci-jenkinsfile-test.git"
+  },
+  "bin": "index.js",
+  "pkg": {
+    "scripts": "index.js",
+    "targets": [
+      "node10-macos-x64",
+      "node10-linux-x64"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mfuroyama/ci-jenkinsfile-test/issues"
+  },
+  "homepage": "https://github.com/mfuroyama/ci-jenkinsfile-test#readme",
+  "dependencies": {
+    "@octokit/rest": "^16.43.1",
+    "meow": "^6.0.1"
+  }
+}
