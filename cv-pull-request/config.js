@@ -120,6 +120,12 @@ const getConfig = async () => {
         message: 'What CV version are you building?',
         validate: value => value ? true : 'Please enter a version',
     }, {
+        type: 'list',
+        name: 'assignees',
+        initial: Array.isArray(options.assignees) ? options.assignees.join(',') : '',
+        message: 'Who are the issue assignees? (separate multiple assignees with a comma)',
+        validate: value => value.length > 0 ? true : 'Please enter at least one assignee',
+    }, {
         type: 'text',
         name: 'token',
         initial: options.token || '',
