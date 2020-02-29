@@ -98,10 +98,8 @@ const createPullRequest = async (request) => {
         };
         await octokit.issues.addAssignees(assigneeParams);
     } catch (err) {
-        const defaultErrorMessage = 'Internal Error';
         const { errors } = err;
-
-        const value = (Array.isArray(errors) && errors.length > 0) ? errors[0].message : defaultErrorMessage;
+        const value = (Array.isArray(errors) && errors.length > 0) ? errors[0].message : err.toString();
         Object.assign(result, { state: 'ERROR', value });
     }
 
