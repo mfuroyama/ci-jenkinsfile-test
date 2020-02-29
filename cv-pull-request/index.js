@@ -133,7 +133,7 @@ const reportResults = async (results) => {
     console.log(chalk.yellow.italic(chalk`(Hold the {bold Command} key to follow the hyperlinks)\n`));
     Object.keys(results).forEach((project) => {
         const { state, value } = results[project];
-        const message = state === 'OK' ? chalk.cyan(terminalLink('Pull Request Link', value)) : chalk.red(value);
+        const message = state === 'OK' ? chalk.cyan(terminalLink(value, value)) : chalk.red(value);
         console.log(` ${SYMBOL_MAP[state]} ${chalk.bold(project)}: ${message}`);
     });
     console.log();
