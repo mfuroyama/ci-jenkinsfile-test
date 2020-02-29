@@ -57,7 +57,7 @@ const createPullRequest = async (request) => {
     });
 
     const {
-        name, version, date, owner, head, base, repo,
+        name, version, date, owner, head, base, repo, assignees,
     } = request;
     const title = `${name} ${version} ${date} Merge Dev Branch into Test Branch`;
     const body = [
@@ -71,24 +71,32 @@ const createPullRequest = async (request) => {
         '**Important Note!** Do **NOT** delete the head branch after completing the pull request merge!',
     ].join('\n');
 
-    const params = {
-        owner,
-        repo,
-        title,
-        head,
-        base,
-        body,
-    };
-
     const result = {
         state: 'OK',
         value: '',
     };
 
     try {
+        // Create the base pull request
+        const params = {
+            owner,
+            repo,
+            title,
+            head,
+            base,
+            body,
+        };
         const results = await octokit.pulls.create(params);
-        const { data: { html_url } } = results;
+        const { data: { html_url, number } } = results;
         result.value = html_url;
+
+        const assigneeParams = {
+            owner,
+            repo,
+            issue_number: number,
+            assignees,
+        };
+        await octokit.issues.addAssignees(assigneeParams);
     } catch (err) {
         const defaultErrorMessage = 'Internal Error';
         const { errors } = err;
