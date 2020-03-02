@@ -8,8 +8,12 @@ const yaml = require('js-yaml');
 const { format } = require('date-fns');
 
 const FLAGS = {
+    version: { type: 'string', alias: 'v' },
+    assignees: { type: 'string', alias: 'a' },
+    token: { type: 'string', alias: 't' },
     configFile: { type: 'string', alias: 'c', default: './cv-pull-request.yaml' },
     debug: { type: 'boolean', alias: 'd', default: false },
+    help: { type: 'boolean', alias: 'h', default: false },
 };
 
 const cli = meow(`
@@ -17,12 +21,17 @@ const cli = meow(`
         cv-pull-request [options]
 
     Options
+        --version, -v      [REQUIRED] CV release version
+        --assignees, -a    [REQUIRED] Assignees (comma-separated list)
+        --token, -t        [REQUIRED] GitHub API token
         --configFile, -c   [OPTIONAL] YAML configuration file (default: './cv-pull-request.yaml')
         --debug, -d        [OPTIONAL] Run in debug mode if present (default: false)
         --help, -h         Show this message
 `, { flags: FLAGS });
 
 const { flags } = cli;
+const { assignees } = flags;
+flags.assignees = (typeof assignees === 'string') ? assignees.split(',') : assignees;
 
 const DEFAULT_PROJECT_CONFIG = [{
     name: 'JLV - CCP',
@@ -101,7 +110,6 @@ const writeOptionFile = (options = {}) => {
 };
 
 const getOptions = () => Object.assign({
-    debug: flags.debug,
     date: format(new Date(), 'MM-dd-yyyy'),
 }, DEFAULT_CONFIG, readOptionFile());
 
@@ -133,6 +141,7 @@ const getConfig = async () => {
         validate: value => value ? true : 'Please enter a GitHub API token',
     }];
 
+    prompts.override(flags);
     const config = await prompts(questions, { onCancel });
     return Object.assign(options, config);
 }
