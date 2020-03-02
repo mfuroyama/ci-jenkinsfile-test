@@ -4,7 +4,7 @@
   "description": "Utility for auto-generating CV pull requests",
   "main": "index.js",
   "scripts": {
-    "build": "npx pkg ."
+    "build": "npx pkg . --out-path dist"
   },
   "repository": {
     "type": "git",
@@ -15,7 +15,8 @@
     "scripts": "index.js",
     "targets": [
       "node10-macos-x64",
-      "node10-linux-x64"
+      "node10-linux-x64",
+      "node10-win-x64"
     ]
   },
   "keywords": [],
