@@ -20,16 +20,16 @@ const getRequests = async (config) => {
             });
         });
 
-    console.log(`The generator will attempt to create the following pull requests:\n`);
+    console.log(`The generator will create pull requests in the following GitHub repositories:\n`);
     requests.forEach(request => {
         const {
             name, owner, repo, head, base,
         } = request;
-        console.log(`${name} [in https://github.com/${owner}/${repo}]`)
-        console.log(`   ${base} <-- ${head}`);
+        const urlString = chalk.cyan(`https://github.com/${owner}/${repo}`);
+        console.log(`${chalk.bold(name)} [in ${urlString}]`);
+        console.log(chalk.italic(`   ${base} <-- ${head}\n`));
     });
 
-    console.log('');
     const { isOk } = await prompts({
         type: 'confirm',
         name: 'isOk',
@@ -129,7 +129,7 @@ const SYMBOL_MAP = {
 }
 
 const reportResults = async (results) => {
-    console.log(chalk.green.bold('\n==== CV PULL REQUEST RESULTS ===='));
+    console.log(chalk.green('\n==== CV PULL REQUEST RESULTS ===='));
     console.log(chalk.yellow.italic(chalk`(Hold the {bold Command} key to follow the hyperlinks)\n`));
     Object.keys(results).forEach((project) => {
         const { state, value } = results[project];
@@ -140,8 +140,9 @@ const reportResults = async (results) => {
 }
 
 (async () => {
-    const versionString = chalk.white.bold(`(v${version})`);
-    console.log(chalk.green.bold(`==== CV PULL REQUEST GENERATOR, ${versionString} ====\n`));
+    const versionString = chalk.green.bold(`v${version}`);
+    console.log(chalk.green(`==== CV PULL REQUEST GENERATOR, ${versionString} ====\n`));
+
     const config = await getConfig();
     const requests = await getRequests(config);
     const results = await createPullRequests(requests);
