@@ -30,15 +30,17 @@ const getRequests = async (config) => {
         console.log(chalk.italic(`   ${base} <-- ${head}\n`));
     });
 
-    const { isOk } = await prompts({
-        type: 'confirm',
-        name: 'isOk',
-        message: 'Is this okay?',
-        initial: true,
-    });
+    if (!config.automatic) {
+        const { isOk } = await prompts({
+            type: 'confirm',
+            name: 'isOk',
+            message: 'Is this okay?',
+            initial: true,
+        });
 
-    if (!isOk) {
-        process.exit(0);
+        if (!isOk) {
+            process.exit(0);
+        }
     }
 
     return requests;
@@ -98,9 +100,15 @@ const createPullRequest = async (request) => {
         };
         await octokit.issues.addAssignees(assigneeParams);
     } catch (err) {
-        const { errors } = err;
-        const value = (Array.isArray(errors) && errors.length > 0) ? errors[0].message : err.toString();
-        Object.assign(result, { state: 'ERROR', value });
+        const getErrorMessage = () => {
+            const { errors } = err;
+            if (!Array.isArray(errors) || errors.length === 0) {
+                return err.toString();
+            }
+            const [error] = errors;
+            return (error.message || err.toString());
+        };
+        Object.assign(result, { state: 'ERROR', value: getErrorMessage() });
     }
 
     return result;
