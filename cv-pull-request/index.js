@@ -1,18 +1,18 @@
 'use strict';
 
-const { Octokit } = require("@octokit/rest");
+const { Octokit } = require('@octokit/rest');
 const Listr = require('listr');
 const chalk = require('chalk');
 const prompts = require('prompts');
 const figures = require('figures');
 const terminalLink = require('terminal-link');
-const { getConfig, saveConfig, version } = require('./config');
+const { getConfig, saveConfig, version: appVersion } = require('./config');
 
 const getRequests = async (config) => {
     const { projects, ...rest } = config;
     const requests = projects
         .map(project => ({ ...project, ...rest }))
-        .map(project => {
+        .map((project) => {
             const { version, head, base } = project;
             return Object.assign(project, {
                 head: head.replace(/{version}/g, version),
@@ -20,8 +20,8 @@ const getRequests = async (config) => {
             });
         });
 
-    console.log(`The generator will create pull requests in the following GitHub repositories:\n`);
-    requests.forEach(request => {
+    console.log('The generator will create pull requests in the following GitHub repositories:\n');
+    requests.forEach((request) => {
         const {
             name, owner, repo, head, base,
         } = request;
@@ -87,8 +87,8 @@ const createPullRequest = async (request) => {
             body,
         };
         const results = await octokit.pulls.create(params);
-        const { data: { html_url, number } } = results;
-        result.value = html_url;
+        const { data: { html_url: htmlURL, number } } = results;
+        result.value = htmlURL;
 
         const assigneeParams = {
             owner,
@@ -126,7 +126,7 @@ const createPullRequests = async (requests) => {
 const SYMBOL_MAP = {
     OK: chalk.green(figures.tick),
     ERROR: chalk.red(figures.cross),
-}
+};
 
 const reportResults = async (results) => {
     console.log(chalk.green('\n==== CV PULL REQUEST RESULTS ===='));
@@ -137,10 +137,10 @@ const reportResults = async (results) => {
         console.log(` ${SYMBOL_MAP[state]} ${chalk.bold(project)}: ${message}`);
     });
     console.log();
-}
+};
 
 (async () => {
-    const versionString = chalk.green.bold(`v${version}`);
+    const versionString = chalk.green.bold(`v${appVersion}`);
     console.log(chalk.green(`==== CV PULL REQUEST GENERATOR, ${versionString} ====\n`));
 
     const config = await getConfig();

@@ -82,7 +82,7 @@ const DEFAULT_CONFIG = {
     timezone: 'Pacific/Honolulu',
     token: '',
     projects: DEFAULT_PROJECT_CONFIG,
-}
+};
 
 const readOptionFile = () => {
     const fileString = chalk.white.bold(flags.configFile);
@@ -94,7 +94,7 @@ const readOptionFile = () => {
         console.log(chalk.yellow(`Couldn't load file ${fileString}, using default values...`));
         return {};
     }
-}
+};
 
 const writeOptionFile = (options = {}) => {
     const fileString = chalk.white.bold(flags.configFile);
@@ -115,7 +115,7 @@ const getOptions = () => Object.assign({
 
 const onCancel = () => {
     process.exit(0);
-}
+};
 
 // ======================================================== API ========================================================
 const getConfig = async () => {
@@ -126,29 +126,29 @@ const getConfig = async () => {
         name: 'version',
         initial: options.version || '',
         message: 'What CV version are you building?',
-        validate: value => value ? true : 'Please enter a version',
+        validate: value => (value ? true : 'Please enter a version'),
     }, {
         type: 'list',
         name: 'assignees',
         initial: Array.isArray(options.assignees) ? options.assignees.join(',') : '',
         message: 'Who are the issue assignees? (separate multiple assignees with a comma)',
-        validate: value => value.length > 0 ? true : 'Please enter at least one assignee',
+        validate: value => (value.length > 0 ? true : 'Please enter at least one assignee'),
     }, {
         type: 'text',
         name: 'token',
         initial: options.token || '',
         message: 'What GitHub API token should we use?',
-        validate: value => value ? true : 'Please enter a GitHub API token',
+        validate: value => (value ? true : 'Please enter a GitHub API token'),
     }];
 
     prompts.override(flags);
     const config = await prompts(questions, { onCancel });
     return Object.assign(options, config);
-}
+};
 
 const saveConfig = (config) => {
     writeOptionFile(config);
-}
+};
 
 module.exports = {
     getConfig,
